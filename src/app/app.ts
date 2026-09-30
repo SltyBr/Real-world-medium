@@ -9,11 +9,11 @@ import { Header } from './components/header/header';
   imports: [RouterOutlet, Header],
   template: `
     <app-header />
-    <!-- {{ articles.value() | json }} -->
+    <router-outlet />
   `,
   styles: ``,
   host: {
-    class: 'flex mx-auto xl:max-w-xl sm:max-w-sm md:max-w-md lg:max-w-lg'
+    class: 'flex flex-col mx-auto xl:max-w-xl sm:max-w-sm md:max-w-md lg:max-w-lg'
   }
 })
 export class App {

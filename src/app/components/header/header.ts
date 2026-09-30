@@ -11,7 +11,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
       <img ngSrc="logo.svg" width="88" height="20" alt="Conduit" priority>
     </a>
     <div class="flex items-center gap-4">
-      <a routerLink="/" routerLinkActive="opacity-100" class="opacity-40 hover:opacity-100">Home</a>
+      <a routerLink="/" routerLinkActive="opacity-100" [routerLinkActiveOptions]="{ exact: true }" class="opacity-40 hover:opacity-100">Home</a>
       @if (isAuthorized) {
         <a routerLink="editor" routerLinkActive="opacity-100" class="opacity-40 hover:opacity-100">New Article</a>
         <a routerLink="settings" routerLinkActive="opacity-100" class="opacity-40 hover:opacity-100">Settings</a>
