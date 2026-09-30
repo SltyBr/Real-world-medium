@@ -1,3 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+
+@theme {
+  --breakpoint-sm: 36rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 62rem;
+  --breakpoint-xl: 75rem;
+
+  --container-sm: 36rem;
+  --container-md: 45rem;
+  --container-lg: 58.75rem;
+  --container-xl: 71.25rem;
+}
