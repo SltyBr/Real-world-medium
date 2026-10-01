@@ -12,4 +12,6 @@
   --container-md: 45rem;
   --container-lg: 58.75rem;
   --container-xl: 71.25rem;
+
+  --color-light: #bbbbbb; 
 }

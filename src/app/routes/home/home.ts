@@ -1,9 +1,17 @@
 import { Component } from '@angular/core';
+import { Banner } from './components/banner/banner';
 
 @Component({
-  imports: [],
+  imports: [Banner],
   selector: 'app-home',
   styles: ``,
-  template: ` <p>home works!</p> `,
+  template: `
+    @if (!isAuthorized) {
+      <app-banner />
+    }
+    
+  `,
 })
-export class Home {}
+export class Home {
+  isAuthorized = false;
+}

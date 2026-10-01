@@ -7,7 +7,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   selector: 'app-header',
   styles: ``,
   template: `
-    <a routerLink="/" class="w-22">
+    <a routerLink="/" class="w-22 shrink-0">
       <img ngSrc="logo.svg" width="88" height="20" alt="Conduit" priority>
     </a>
     <div class="flex items-center gap-4">
