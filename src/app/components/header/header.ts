@@ -1,6 +1,7 @@
 import { NgOptimizedImage } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { CONTAINER } from '../../tailwind-classes';
 
 @Component({
   imports: [RouterLink, NgOptimizedImage, RouterLinkActive],
@@ -23,7 +24,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     </div>
   `,
   host: {
-    class: 'flex w-full items-center justify-between items-center py-4 px-2'
+    class: `${CONTAINER} flex w-full items-center justify-between items-center py-4 px-2`
   }
 })
 export class Header {

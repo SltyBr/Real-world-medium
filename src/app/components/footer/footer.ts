@@ -16,7 +16,7 @@ import { Component } from '@angular/core';
     </div>
   `,
   host: {
-    class: 'flex justify-center gap-2.5 items-center'
+    class: 'flex justify-center gap-2.5 items-center py-4 border-t border-light'
   }
 })
 export class Footer {

@@ -7,12 +7,12 @@ import { Component } from '@angular/core';
   styles: ``,
   template: `
     <img class="pb-2" ngSrc="logo.svg" width="210" height="48" alt="Conduit" priority />
-    <p class="text-light">
+    <p class="text-light text-center">
       This is the
       <a class="text-green-500 underline" href="https://github.com/realworld-apps/angular-realworld-example-app">Angular frontend</a>
       demo from the <a class="text-green-500 underline" href="https://github.com/realworld-apps/realworld">Realworld</a> project.
     </p>
-    <p class="text-light">
+    <p class="text-light text-center">
       This demo is connected to a demo backend that enforces session isolation.
     </p>
   `,
