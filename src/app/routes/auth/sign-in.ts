@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 
 @Component({
   imports: [],
-  selector: 'app-login',
+  selector: 'app-sign-in',
   styles: ``,
-  template: ` <p>login works!</p> `,
+  template: ` <p>signin works!</p> `,
 })
-export class Login {}
+export class SignIn {}

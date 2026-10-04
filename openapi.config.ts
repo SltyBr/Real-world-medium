@@ -9,6 +9,5 @@ export default {
   options: {
     dateType: "Date",
     enumStyle: "enum",
-    generateServices: false,
   },
 } as GeneratorConfig;

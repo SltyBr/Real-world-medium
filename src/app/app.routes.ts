@@ -3,8 +3,12 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
+    redirectTo: 'home',
+    pathMatch: 'full'
+  },
+  {
+    path: 'home',
     loadComponent: () => import('./routes/home/home').then(comp => comp.Home),
-    pathMatch: 'full',
   },
   {
     path: 'settings',
@@ -17,6 +21,14 @@ export const routes: Routes = [
   {
     path: 'profile/:userName',
     loadComponent: () => import('./routes/profile/profile').then(comp => comp.Profile),
+  },
+  {
+    path: 'sign-up',
+    loadComponent: () => import('./routes/auth/sign-up').then(c => c.SignUp),
+  },
+  {
+    path: 'sign-in',
+    loadComponent: () => import('./routes/auth/sign-in').then(c => c.SignIn),
   },
   {
     path: '**',
