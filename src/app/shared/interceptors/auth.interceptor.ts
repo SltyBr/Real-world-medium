@@ -4,12 +4,14 @@ import { LOCAL_STORAGE } from '../tokens/local-storage';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = inject(LOCAL_STORAGE).getItem('jwtToken') ?? '';
-  console.log(token)
-  req = req.clone({
-    setHeaders: {
-      Authorization: token ? `Token ${token}` : ''
-    }
-  });
+
+  if (token) {
+    req = req.clone({
+      setHeaders: {
+        Authorization: `Token ${token}`
+      }
+    });
+  }
 
   return next(req);
 }
