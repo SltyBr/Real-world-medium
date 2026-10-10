@@ -1,31 +1,24 @@
-import { Directive, HostBinding, HostListener, Input } from '@angular/core';
+import { Directive, input } from '@angular/core';
 
-export function toBooleanProperty(value: any): boolean {
+function toBooleanProperty(value: any): boolean {
   return value != null && `${value}` !== 'false';
 }
 
 @Directive({
-  selector: '[dfCanDisable]',
+  selector: '[disabled]',
+  host: {
+    '[attr.disabled]': 'disabled() ? "" : null',
+    '(click)': 'onClick($event)',
+    '(dblclick)': 'onClick($event)'
+  }
 })
 export class CanDisable {
-  @Input()
-  set disabled(value: any) {
-    this.#disabled = toBooleanProperty(value);
-  }
-  get disabled(): boolean {
-    return this.#disabled;
-  }
-  #disabled = false;
+  disabled = input<any, boolean>('false', {
+    transform: toBooleanProperty
+  });
 
-  @HostBinding('attr.disabled')
-  protected get nativeDisabled(): '' | null {
-    return this.disabled ? '' : null;
-  }
-
-  @HostListener('click', ['$event'])
-  @HostListener('dblclick', ['$event'])
   onClick(e: Event) {
-    if (this.disabled) {
+    if (this.disabled()) {
       e.preventDefault();
       e.stopImmediatePropagation();
     }
