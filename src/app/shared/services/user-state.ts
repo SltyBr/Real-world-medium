@@ -6,4 +6,5 @@ import { NewUserBody } from '@api/models';
 })
 export class UserState {
   $user = signal<NewUserBody | null>(null);
+  $loading = signal<boolean>(false);
 }

@@ -1,5 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
-import { email, form, minLength, required, schema, FormRoot } from '@angular/forms/signals';
+import { NgClass } from '@angular/common';
+import { Component, computed, inject, signal } from '@angular/core';
+import { email, form, minLength, required, schema, FormRoot, FormField, FieldState } from '@angular/forms/signals';
 import { RouterLink } from '@angular/router';
 import { UsersService } from '@api/services';
 import { firstValueFrom } from 'rxjs';
@@ -30,7 +31,7 @@ const signUpSchema = schema<ISignUp>(fieldPath => {
 });
 
 @Component({
-  imports: [CanDisable, FormRoot, RouterLink, Input],
+  imports: [CanDisable, FormRoot, RouterLink, Input, FormField, NgClass],
   selector: 'app-sign-up',
   styles: ``,
   template: `
@@ -42,9 +43,40 @@ const signUpSchema = schema<ISignUp>(fieldPath => {
       Have an account?
     </a>
     <form [formRoot]="signUpForm" class="flex flex-col gap-4 w-[40%] min-w-[300px]" (submit)="onSubmit($event)">
-      <app-input [control]="signUpForm.username" placeholder="username" />
-      <app-input [control]="signUpForm.email" placeholder="email" type="email" />
-      <app-input [control]="signUpForm.password" placeholder="password" type="password"/>
+      <app-input [control]="signUpForm.username" placeholder="username">
+        <input
+          coInput
+          placeholder="username"
+          class="w-full text-xl px-3 py-2 border border-light rounded-xl focus:outline-2 focus:outline-green-500"
+          [formField]="signUpForm.username"
+          [ngClass]="{
+            'focus:outline-2 focus:outline-red-500 border-red-500': canCheck(signUpForm.username)()
+          }" />
+      </app-input>
+      <app-input [control]="signUpForm.email">
+        <input
+          coInput
+          type="email"
+          placeholder="email"
+          class="w-full text-xl px-3 py-2 border border-light rounded-xl focus:outline-2 focus:outline-green-500"
+          [formField]="signUpForm.email"
+          [ngClass]="{
+            'focus:outline-2 focus:outline-red-500 border-red-500': canCheck(signUpForm.email)()
+          }"
+        />
+      </app-input>
+      <app-input [control]="signUpForm.password">
+        <input
+          coInput
+          type="password"
+          placeholder="password"
+          class="w-full text-xl px-3 py-2 border border-light rounded-xl focus:outline-2 focus:outline-green-500"
+          [formField]="signUpForm.password"
+          [ngClass]="{
+            'focus:outline-2 focus:outline-red-500 border-red-500': canCheck(signUpForm.password)()
+          }"
+        />
+      </app-input>
 
       <div class="text-end">
         <button
@@ -84,6 +116,11 @@ export class SignUp {
     }
   });
 
+  canCheck = (state: () => FieldState<string, string>) => computed(() => {
+    const control = state();
+
+    return control.touched() && control.invalid() && control.dirty();
+  })
 
   onSubmit(event: SubmitEvent) {
     event.preventDefault();

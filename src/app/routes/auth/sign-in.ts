@@ -1,5 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
-import { email, form, FormRoot, minLength, required, schema } from '@angular/forms/signals';
+import { NgClass } from '@angular/common';
+import { Component, computed, inject, signal } from '@angular/core';
+import { email, FieldState, form, FormField, FormRoot, minLength, required, schema } from '@angular/forms/signals';
 import { RouterLink } from '@angular/router';
 import { UsersService } from '@api/services';
 import { firstValueFrom } from 'rxjs';
@@ -27,7 +28,7 @@ const signInSchema = schema<ISignIn>(fieldPath => {
 
 
 @Component({
-  imports: [RouterLink, FormRoot, Input, CanDisable],
+  imports: [RouterLink, FormRoot, Input, CanDisable, FormField, NgClass],
   selector: 'app-sign-in',
   styles: ``,
   template: `
@@ -39,8 +40,30 @@ const signInSchema = schema<ISignIn>(fieldPath => {
       Need an account?
     </a>
     <form [formRoot]="signInForm" class="flex flex-col gap-4 w-[40%] min-w-[300px]" (submit)="onSubmit($event)">
-      <app-input [control]="signInForm.email" placeholder="email" type="email" />
-      <app-input [control]="signInForm.password" placeholder="password" type="password"/>
+      <app-input [control]="signInForm.email">
+        <input
+          coInput
+          type="email"
+          placeholder="email"
+          class="w-full text-xl px-3 py-2 border border-light rounded-xl focus:outline-2 focus:outline-green-500"
+          [formField]="signInForm.email"
+          [ngClass]="{
+            'focus:outline-2 focus:outline-red-500 border-red-500': canCheck(signInForm.email)()
+          }"
+        />
+      </app-input>
+      <app-input [control]="signInForm.password" placeholder="password" type="password">
+        <input
+          coInput
+          type="password"
+          placeholder="password"
+          class="w-full text-xl px-3 py-2 border border-light rounded-xl focus:outline-2 focus:outline-green-500"
+          [formField]="signInForm.password"
+          [ngClass]="{
+            'focus:outline-2 focus:outline-red-500 border-red-500': canCheck(signInForm.password)()
+          }"
+        />
+      </app-input>
 
       <div class="text-end">
         <button
@@ -80,6 +103,11 @@ export class SignIn {
     }
   });
 
+  canCheck = (state: () => FieldState<string, string>) => computed(() => {
+    const control = state();
+
+    return control.touched() && control.invalid() && control.dirty();
+  })
 
   onSubmit(event: SubmitEvent) {
     event.preventDefault();

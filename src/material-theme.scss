@@ -46,4 +46,8 @@ body {
     active-hover-indicator-color: var(--color-green-500),
     active-hover-label-text-color: var(--color-green-500),
   ));
+
+  @include mat.progress-spinner-overrides((
+    active-indicator-color: var(--color-green-500),
+  ));
 }
