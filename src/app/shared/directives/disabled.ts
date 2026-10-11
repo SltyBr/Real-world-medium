@@ -5,7 +5,7 @@ function toBooleanProperty(value: any): boolean {
 }
 
 @Directive({
-  selector: '[disabled]',
+  selector: '[canDisable]',
   host: {
     '[attr.disabled]': 'disabled() ? "" : null',
     '(click)': 'onClick($event)',

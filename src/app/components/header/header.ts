@@ -15,13 +15,13 @@ import { ClientRender } from 'src/app/shared/directives/client.directive';
       <img ngSrc="logo.svg" width="88" height="20" alt="Conduit" priority>
     </a>
     <div *client-render class="flex items-center gap-4">
-      <a routerLink="/" routerLinkActive="opacity-100" [routerLinkActiveOptions]="{ exact: true }" class="opacity-40 hover:opacity-100">Home</a>
+      <a routerLink="/" routerLinkActive="opacity-100 font-semibold" class="opacity-40 hover:opacity-100">Home</a>
       @if ($user()) {
-        <a routerLink="editor" routerLinkActive="opacity-100" class="opacity-40 hover:opacity-100">New Article</a>
-        <a routerLink="settings" routerLinkActive="opacity-100" class="opacity-40 hover:opacity-100">Settings</a>
+        <a routerLink="editor" routerLinkActive="opacity-100 font-semibold" class="opacity-40 hover:opacity-100">New Article</a>
+        <a routerLink="settings" routerLinkActive="opacity-100 font-semibold" class="opacity-40 hover:opacity-100">Settings</a>
         <a [routerLink]="['profile', $user()?.username]" routerLinkActive="opacity-100" class="opacity-40 hover:opacity-100">{{ $user()?.username }}</a>
       } @else {
-        <a routerLink="sign-in" routerLinkActive="opacity-100" class="opacity-40 hover:opacity-100">Sign in</a>
+        <a routerLink="sign-in" routerLinkActive="opacity-100 font-semibold" class="opacity-40 hover:opacity-100">Sign in</a>
         <a routerLink="sign-up" class="bg-green-500 text-white py-2 px-4 rounded-4xl transition-colors hover:bg-green-600">Sign up</a>
       }
     </div>
