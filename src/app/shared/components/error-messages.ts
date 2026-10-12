@@ -13,7 +13,7 @@ import { FieldState } from '@angular/forms/signals';
     }
   `,
   host: {
-    class: 'flex flex-col absolute text-[10px] text-red-500'
+    class: 'flex flex-col leading-none absolute text-[10px] text-red-500'
   }
 })
 export class ErrorMessages<T> {
