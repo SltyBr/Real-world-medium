@@ -15,3 +15,11 @@
 
   --color-light: #bbbbbb; 
 }
+
+.invalid-control {
+  @apply focus:outline-2 focus:outline-red-500 border-red-500;
+}
+
+.valid-control {
+  @apply focus:outline-2 focus:outline-green-500;
+}

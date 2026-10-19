@@ -1,7 +1,6 @@
-import { NgClass } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
-import { email, form, minLength, required, schema, FormRoot, FormField, FieldState } from '@angular/forms/signals';
-import { RouterLink } from '@angular/router';
+import { Component, inject, signal, WritableSignal } from '@angular/core';
+import { email, form, minLength, required, schema, FormRoot, FormField, disabled } from '@angular/forms/signals';
+import { Router, RouterLink } from '@angular/router';
 import { UsersService } from '@api/services';
 import { firstValueFrom } from 'rxjs';
 import { Input } from 'src/app/shared/components/input/input';
@@ -21,17 +20,20 @@ const INITIAL_DATA: ISignUp = {
   username: ''
 };
 
-const signUpSchema = schema<ISignUp>(fieldPath => {
-  required(fieldPath.email, { message: 'email required' });
-  email(fieldPath.email, { message: 'Enter a valid email' });
-  required(fieldPath.password, { message: 'password required' });
-  required(fieldPath.username, { message: 'username required' });
-  minLength(fieldPath.username, 3, { message: 'min length 3' })
-  minLength(fieldPath.password, 3, { message: 'min length 3' })
-});
+const signUpSchema = (formDisabled: WritableSignal<boolean>) => {
+  return schema<ISignUp>(fieldPath => {
+    required(fieldPath.email, { message: 'email required' });
+    email(fieldPath.email, { message: 'Enter a valid email' });
+    required(fieldPath.password, { message: 'password required' });
+    required(fieldPath.username, { message: 'username required' });
+    minLength(fieldPath.username, 3, { message: 'min length 3' });
+    minLength(fieldPath.password, 3, { message: 'min length 3' });
+    disabled(fieldPath, () => formDisabled())
+  });
+}
 
 @Component({
-  imports: [CanDisable, FormRoot, RouterLink, Input, FormField, NgClass],
+  imports: [CanDisable, FormRoot, RouterLink, Input, FormField],
   selector: 'app-sign-up',
   styles: ``,
   template: `
@@ -47,22 +49,17 @@ const signUpSchema = schema<ISignUp>(fieldPath => {
         <input
           coInput
           placeholder="username"
-          class="w-full text-xl px-3 py-2 border border-light rounded-xl focus:outline-2 focus:outline-green-500"
+          class="w-full text-xl px-3 py-2 border border-light rounded-xl"
           [formField]="signUpForm.username"
-          [ngClass]="{
-            'focus:outline-2 focus:outline-red-500 border-red-500': canCheck(signUpForm.username)()
-          }" />
+        />
       </app-input>
       <app-input [control]="signUpForm.email">
         <input
           coInput
           type="email"
           placeholder="email"
-          class="w-full text-xl px-3 py-2 border border-light rounded-xl focus:outline-2 focus:outline-green-500"
+          class="w-full text-xl px-3 py-2 border border-light rounded-xl"
           [formField]="signUpForm.email"
-          [ngClass]="{
-            'focus:outline-2 focus:outline-red-500 border-red-500': canCheck(signUpForm.email)()
-          }"
         />
       </app-input>
       <app-input [control]="signUpForm.password">
@@ -70,11 +67,8 @@ const signUpSchema = schema<ISignUp>(fieldPath => {
           coInput
           type="password"
           placeholder="password"
-          class="w-full text-xl px-3 py-2 border border-light rounded-xl focus:outline-2 focus:outline-green-500"
+          class="w-full text-xl px-3 py-2 border border-light rounded-xl"
           [formField]="signUpForm.password"
-          [ngClass]="{
-            'focus:outline-2 focus:outline-red-500 border-red-500': canCheck(signUpForm.password)()
-          }"
         />
       </app-input>
 
@@ -97,30 +91,28 @@ const signUpSchema = schema<ISignUp>(fieldPath => {
 export class SignUp {
   usersService = inject(UsersService);
   localStorage = inject(LOCAL_STORAGE);
+  router = inject(Router);
   $user = inject(UserState).$user;
+  formDisabled = signal(false);
 
   signUpModel = signal<ISignUp>(INITIAL_DATA);
-  signUpForm = form(this.signUpModel, signUpSchema, {
+  signUpForm = form(this.signUpModel, signUpSchema(this.formDisabled), {
     submission: {
       action: async () => {
         try {
+          this.formDisabled.set(true);
           const credentials = this.signUpModel();
           const v = await firstValueFrom(this.usersService.registerApiUsersPost({ user: credentials }));
           const { user: { token, email, username } } = v;
           this.localStorage.setItem('jwtToken', token);
           this.$user.set({ email, username });
+          await this.router.navigate(['/']);
         } catch (err) {
-          // TODO
+          this.formDisabled.set(false);
         }
       }
     }
   });
-
-  canCheck = (state: () => FieldState<string, string>) => computed(() => {
-    const control = state();
-
-    return control.touched() && control.invalid() && control.dirty();
-  })
 
   onSubmit(event: SubmitEvent) {
     event.preventDefault();

@@ -1,10 +1,11 @@
 import { NgOptimizedImage } from '@angular/common';
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CONTAINER } from '../../tailwind-classes';
 import { UserState } from 'src/app/shared/services/user-state';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ClientRender } from 'src/app/shared/directives/client.directive';
+import { NewUserBody } from '@api/models';
 
 @Component({
   imports: [RouterLink, NgOptimizedImage, RouterLinkActive, MatProgressSpinnerModule, ClientRender],
@@ -18,10 +19,10 @@ import { ClientRender } from 'src/app/shared/directives/client.directive';
       @if ($loading()) {
         <mat-spinner diameter="16"></mat-spinner>
       } @else {
-        @if ($user()) {
+        @if (user()) {
           <a routerLink="editor" routerLinkActive="opacity-100 font-semibold" class="opacity-40 hover:opacity-100">New Article</a>
           <a routerLink="settings" routerLinkActive="opacity-100 font-semibold" class="opacity-40 hover:opacity-100">Settings</a>
-          <a [routerLink]="['profile', $user()?.username]" routerLinkActive="opacity-100" class="opacity-40 hover:opacity-100">{{ $user()?.username }}</a>
+          <a [routerLink]="['profile', user()?.username]" routerLinkActive="opacity-100" class="opacity-40 hover:opacity-100">{{ user()?.username }}</a>
         } @else {
           <a routerLink="sign-in" routerLinkActive="opacity-100 font-semibold" class="opacity-40 hover:opacity-100">Sign in</a>
           <a routerLink="sign-up" class="bg-green-500 text-white py-2 px-4 rounded-4xl transition-colors hover:bg-green-600">Sign up</a>
@@ -35,11 +36,7 @@ import { ClientRender } from 'src/app/shared/directives/client.directive';
 })
 export class Header {
   UserState = inject(UserState);
-  $user = this.UserState.$user;
-
-  $username = computed(() => {
-    return this.$user()?.username;
-  });
+  user = input.required<NewUserBody | null>();
 
   $loading = this.UserState.$loading;
 }
